@@ -90,8 +90,24 @@ int main() {
         course->print_Details();
         offline_Courses.push_back(course);
     }
-    
+    cout << "Enter the number of course in the univerity portal for online section:" << "\n";
+    cin >> numcourses;
+    cin.ignore();
+    vector<online_Course* >online_Courses;
+    for (int i = 1; i <= numcourses; ++i) {
+        cout << "Enter the courses details:" << "\n";
+        cout << "course Name: ";
+        getline(cin, courseName);
+        cout << "Course code: ";
+        getline(cin, courseCode);
+        online_Course* course = new online_Course(courseName, courseCode);
+        course->print_Details();
+        online_Courses.push_back(course);
+    }
     for (auto course : offline_Courses) {
+        delete course;
+    }
+    for (auto course : online_Courses) {
         delete course;
     }
 
