@@ -8,6 +8,7 @@ using namespace std;
 class Course {
 public:
     virtual void print_Details() = 0;
+    virtual string getcoursecode() = 0;
 };
 
 class offline_Course : public Course {
@@ -24,6 +25,9 @@ public:
         cout << "Name of course is: " << course_Name << "\n";
         cout << "Code of the course is: " << course_Code << "\n";
     }
+    string getcoursecode() override{
+        return course_Code;
+    }
 };
 
 class online_Course : public Course {
@@ -39,6 +43,10 @@ public:
     void print_Details() override {
         cout << "Name of the course is: " << course_Name << "\n";
         cout << "Code of the course is: " << course_Code << "\n";
+    }
+
+    string getcoursecode() override{
+        return course_Code;
     }
 };
 
@@ -67,6 +75,7 @@ public:
             course->print_Details();
         }
     }
+   
 };
 
 int main() {
@@ -104,6 +113,49 @@ int main() {
         course->print_Details();
         online_Courses.push_back(course);
     }
+ 
+
+    string Name, UID, Section, Password;
+    cout << "Enter the user credential:" << "\n";
+    cout<<"Name: ";
+    getline(cin, Name);
+    cout << "UID: ";
+    getline(cin, UID);
+    cout << "Section: ";
+    getline(cin, Section);
+    cout << "Password: ";
+    getline(cin, Password);
+    student s1(Name, UID, Section, Password);
+
+    string regcourse_code;
+    cout << "Enter the course code for which you want to register:" << "\n"; 
+    cout << "Regcourse_code: ";
+    getline(cin, regcourse_code);
+
+    bool found = false;
+    for (auto& course : offline_Courses) {
+        if (course->getcoursecode() == regcourse_code) {
+            s1.register_course(course);
+            found = true;
+            break;
+        }
+      }
+    for (auto& course : online_Courses) {
+        if (course->getcoursecode() == regcourse_code) {
+            s1.register_course(course);
+            found = true;
+            break;
+        }
+    }
+    if (found) {
+        cout << "Course registered successfully!\n";
+    }
+    else {
+        cout << "Course code not found. Registration failed.\n";
+    }
+
+    s1.print_reg_course();
+
     for (auto course : offline_Courses) {
         delete course;
     }
