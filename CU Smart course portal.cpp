@@ -50,6 +50,23 @@ public:
     }
 };
 
+class unicore_Course : public Course {
+private:
+    string course_Name;
+    string course_Code;
+public:
+    unicore_Course(string name, string code) {
+        course_Name = name;
+        course_Code = code;
+    }
+    void print_Details() override{
+        cout << "Name of the course is:" << course_Name << "\n";
+        cout << "Code of the course is:" << course_Code << "\n";
+    }
+    string getcoursecode() override {
+        return course_Code;
+    }
+};
 class student {
 private:
     string Name;
@@ -99,12 +116,15 @@ int main() {
         course->print_Details();
         offline_Courses.push_back(course);
     }
+
     cout << "Enter the number of course in the univerity portal for online section:" << "\n";
     cin >> numcourses;
     cin.ignore();
+
     vector<online_Course* >online_Courses;
+
     for (int i = 1; i <= numcourses; ++i) {
-        cout << "Enter the courses details:" << "\n";
+        cout << "Enter the courses details:" <<i<< "\n";
         cout << "course Name: ";
         getline(cin, courseName);
         cout << "Course code: ";
@@ -113,7 +133,23 @@ int main() {
         course->print_Details();
         online_Courses.push_back(course);
     }
- 
+
+    cout << "Enter the number of courses in university portal for university core section:" << "\n";
+    cin >> numcourses;
+    cin.ignore();
+
+    vector<unicore_Course* >unicore_Courses;
+
+    for (int i = 1; i <= numcourses; ++i) {
+        cout << "Enter the courses details:" << i << "\n";
+        cout << "Course name:";
+        getline(cin, courseName);
+        cout << "Course Code:";
+        getline(cin, courseCode);
+        unicore_Course* course = new unicore_Course(courseName, courseCode);
+        course->print_Details();
+        unicore_Courses.push_back(course);
+    }
 
     string Name, UID, Section, Password;
     cout << "Enter the user credential:" << "\n";
@@ -147,6 +183,13 @@ int main() {
             break;
         }
     }
+    for (auto& course : unicore_Courses) {
+        if (course->getcoursecode() == regcourse_code) {
+            s1.register_course(course);
+            found = true;
+            break;
+        }
+    }
     if (found) {
         cout << "Course registered successfully!\n";
     }
@@ -160,6 +203,9 @@ int main() {
         delete course;
     }
     for (auto course : online_Courses) {
+        delete course;
+    }
+    for (auto course : unicore_Courses) {
         delete course;
     }
 
