@@ -6,12 +6,15 @@
 #include<unordered_map>
 using namespace std;
 
+//abstract class 
 class Course {
 public:
-    virtual void print_Details() = 0;
+    // pure virtual functions.
+    virtual void print_Details() = 0; 
     virtual string getcoursecode() = 0;
 };
 
+// offline course enrollment class.
 class offline_Course : public Course {
 private:
     string course_Name;
@@ -31,6 +34,7 @@ public:
     }
 };
 
+//online course course enrollment class
 class online_Course : public Course {
 private:
     string course_Name;
@@ -51,6 +55,7 @@ public:
     }
 };
 
+// university mandatory course enrollment class
 class unicore_Course : public Course {
 private:
     string course_Name;
@@ -69,6 +74,8 @@ public:
     }
 };
 
+
+// authenticator class.
 class authenticator {
 private:
     unordered_map<string, string> user_Credentials;
@@ -95,6 +102,8 @@ public:
     }
 };
 
+
+// student information class 
 class student {
 private:
     string Name;
@@ -140,7 +149,7 @@ int main() {
     auth.insert(Name, Password);
 
     // User login for course registration
-    cout << "\n---- Sign in ----";
+    cout << "\n---- Sign in ----\n";
     string login_name, login_password;
     cout << "Enter your name: ";
     getline(cin, login_name);
@@ -155,7 +164,7 @@ int main() {
     // Student object created after successful login.
     student s1(Name, UID, Section, Password);
 
-    // Course enrollmentregistration logic.
+    // Course enrollment registration logic.
     string courseName, courseCode;
     int numcourses;
 
@@ -243,6 +252,8 @@ int main() {
 
     s1.print_reg_course();
 
+
+    // free up the memory used fer better performance.
     for (auto course : offline_Courses) {
         delete course;
     }
