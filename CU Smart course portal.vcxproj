@@ -132,6 +132,7 @@
   <ItemGroup>
     <None Include="app.py" />
     <None Include="Edutrack.html" />
+    <None Include="Login.html" />
     <None Include="register.html" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
