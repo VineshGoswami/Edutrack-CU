@@ -3,6 +3,7 @@
 #include<string>
 #include<algorithm>
 #include<list>
+#include<unordered_map>
 using namespace std;
 
 class Course {
@@ -25,7 +26,7 @@ public:
         cout << "Name of course is: " << course_Name << "\n";
         cout << "Code of the course is: " << course_Code << "\n";
     }
-    string getcoursecode() override{
+    string getcoursecode() override {
         return course_Code;
     }
 };
@@ -45,7 +46,7 @@ public:
         cout << "Code of the course is: " << course_Code << "\n";
     }
 
-    string getcoursecode() override{
+    string getcoursecode() override {
         return course_Code;
     }
 };
@@ -59,7 +60,7 @@ public:
         course_Name = name;
         course_Code = code;
     }
-    void print_Details() override{
+    void print_Details() override {
         cout << "Name of the course is:" << course_Name << "\n";
         cout << "Code of the course is:" << course_Code << "\n";
     }
@@ -67,6 +68,33 @@ public:
         return course_Code;
     }
 };
+
+class authenticator {
+private:
+    unordered_map<string, string> user_Credentials;
+public:
+    void insert(const string& username, const string& password) {
+        if (user_Credentials.find(username) == user_Credentials.end()) {
+            user_Credentials[username] = password;
+            cout << "User " << username << " registered successfully.\n";
+        }
+        else {
+            cout << "Username " << username << " already exists. Try a different one.\n";
+        }
+    }
+
+    bool authenticate(const string& username, const string& password) {
+        if (user_Credentials.count(username) && user_Credentials[username] == password) {
+            cout << "Authentication successful for user " << username << "!\n";
+            return true;
+        }
+        else {
+            cout << "Authentication failed. Invalid username or password.\n";
+            return false;
+        }
+    }
+};
+
 class student {
 private:
     string Name;
@@ -92,40 +120,69 @@ public:
             course->print_Details();
         }
     }
-   
 };
 
 int main() {
+    authenticator auth;
+    string Name, UID, Section, Password;
+
+    // User registration
+    cout << "---- User Registration ----\n";
+    cout << "Enter the user credentials to register:\n";
+    cout << "Name: ";
+    getline(cin, Name);
+    cout << "UID: ";
+    getline(cin, UID);
+    cout << "Section: ";
+    getline(cin, Section);
+    cout << "Password: ";
+    getline(cin, Password);
+    auth.insert(Name, Password);
+
+    // User login for course registration
+    cout << "\n---- Sign in ----";
+    string login_name, login_password;
+    cout << "Enter your name: ";
+    getline(cin, login_name);
+    cout << "Enter your password: ";
+    getline(cin, login_password);
+
+    if (!auth.authenticate(login_name, login_password)) {
+        cout << "Login failed. Exiting.\n";
+        return 1;
+    }
+
+    // Student object created after successful login.
+    student s1(Name, UID, Section, Password);
+
+    // Course enrollmentregistration logic.
     string courseName, courseCode;
     int numcourses;
 
-    cout << "Enter the number of courses in the university portal for offline pursuing:" << "\n";
+    cout << "Enter the number of courses in the university portal for offline pursuing:\n";
     cin >> numcourses;
     cin.ignore();
 
     vector<offline_Course*> offline_Courses;
-
     for (int i = 1; i <= numcourses; ++i) {
-        cout << "Enter the course details " << i << ": " << "\n";
+        cout << "Enter the course details " << i << ":\n";
         cout << "Course name: ";
         getline(cin, courseName);
         cout << "Course code: ";
         getline(cin, courseCode);
-
         offline_Course* course = new offline_Course(courseName, courseCode);
         course->print_Details();
         offline_Courses.push_back(course);
     }
 
-    cout << "Enter the number of course in the univerity portal for online section:" << "\n";
+    cout << "Enter the number of courses in the university portal for online section:\n";
     cin >> numcourses;
     cin.ignore();
 
-    vector<online_Course* >online_Courses;
-
+    vector<online_Course*> online_Courses;
     for (int i = 1; i <= numcourses; ++i) {
-        cout << "Enter the courses details:" <<i<< "\n";
-        cout << "course Name: ";
+        cout << "Enter the course details " << i << ":\n";
+        cout << "Course name: ";
         getline(cin, courseName);
         cout << "Course code: ";
         getline(cin, courseCode);
@@ -134,38 +191,24 @@ int main() {
         online_Courses.push_back(course);
     }
 
-    cout << "Enter the number of courses in university portal for university core section:" << "\n";
+    cout << "Enter the number of courses in the university portal for university core section:\n";
     cin >> numcourses;
     cin.ignore();
 
-    vector<unicore_Course* >unicore_Courses;
-
+    vector<unicore_Course*> unicore_Courses;
     for (int i = 1; i <= numcourses; ++i) {
-        cout << "Enter the courses details:" << i << "\n";
-        cout << "Course name:";
+        cout << "Enter the course details " << i << ":\n";
+        cout << "Course name: ";
         getline(cin, courseName);
-        cout << "Course Code:";
+        cout << "Course code: ";
         getline(cin, courseCode);
         unicore_Course* course = new unicore_Course(courseName, courseCode);
         course->print_Details();
         unicore_Courses.push_back(course);
     }
 
-    string Name, UID, Section, Password;
-    cout << "Enter the user credential:" << "\n";
-    cout<<"Name: ";
-    getline(cin, Name);
-    cout << "UID: ";
-    getline(cin, UID);
-    cout << "Section: ";
-    getline(cin, Section);
-    cout << "Password: ";
-    getline(cin, Password);
-    student s1(Name, UID, Section, Password);
-
     string regcourse_code;
-    cout << "Enter the course code for which you want to register:" << "\n"; 
-    cout << "Regcourse_code: ";
+    cout << "Enter the course code for which you want to register:\n";
     getline(cin, regcourse_code);
 
     bool found = false;
@@ -175,7 +218,7 @@ int main() {
             found = true;
             break;
         }
-      }
+    }
     for (auto& course : online_Courses) {
         if (course->getcoursecode() == regcourse_code) {
             s1.register_course(course);
@@ -190,6 +233,7 @@ int main() {
             break;
         }
     }
+
     if (found) {
         cout << "Course registered successfully!\n";
     }
