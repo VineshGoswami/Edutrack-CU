@@ -22,5 +22,6 @@
   <ItemGroup>
     <None Include="Edutrack.html" />
     <None Include="app.py" />
+    <None Include="register.html" />
   </ItemGroup>
 </Project>
